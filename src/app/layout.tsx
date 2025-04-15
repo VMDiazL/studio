@@ -1,6 +1,9 @@
 import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
+import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from '@/components/ui/menubar';
+import {Home, Plus, Settings} from "lucide-react";
+import { Icons } from '@/components/icons';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -25,6 +28,42 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <header className="bg-secondary p-4">
+          <Menubar>
+            <MenubarMenu>
+              <MenubarTrigger>
+                <Home className="mr-2 h-4 w-4" />
+                Home
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>
+                  <a href="/">Dashboard</a>
+                </MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger>
+                <Plus className="mr-2 h-4 w-4" />
+                Add
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>
+                  <a href="/inventory">Inventory</a>
+                </MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger>
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>Profile</MenubarItem>
+                <MenubarItem>Preferences</MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+          </Menubar>
+        </header>
         {children}
       </body>
     </html>
