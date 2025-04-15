@@ -8,6 +8,7 @@ import {Home, Plus, Settings, ShoppingCart, PackagePlus} from "lucide-react";
 import { Icons } from '@/components/icons';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 
 const geistSans = Geist({
@@ -32,12 +33,23 @@ export default function RootLayout({
 }: RootLayoutProps) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const [currentUsername, setCurrentUsername] = useState<string | null>(null);
+
 
   useEffect(() => {
     // Check if username exists in local storage on component mount
     const storedUsername = localStorage.getItem('username');
     setIsLoggedIn(!!storedUsername);
+    setCurrentUsername(storedUsername);
   }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('username');
+    setIsLoggedIn(false);
+    setCurrentUsername(null);
+    router.push('/');
+  };
+
 
   return (
     <html lang="en">
@@ -88,7 +100,14 @@ export default function RootLayout({
                 </MenubarContent>
               </MenubarMenu>
             </Menubar>
-            {username && <div className="text-sm ml-4">Logged in as: {username}</div>}
+            {currentUsername && (
+              <div className="flex items-center justify-between">
+                <div className="text-sm ml-4">Logged in as: {currentUsername}</div>
+                <Button variant="outline" size="sm" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </div>
+            )}
           </header>
         )}
         {children}
@@ -96,5 +115,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
