@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
 import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from '@/components/ui/menubar';
-import {Home, Plus, Settings} from "lucide-react";
+import {Home, Plus, Settings, Shop} from "lucide-react";
 import { Icons } from '@/components/icons';
 
 const geistSans = Geist({
@@ -49,6 +49,9 @@ export default function RootLayout({
               <MenubarContent>
                 <MenubarItem>
                   <a href="/inventory">Inventory</a>
+                </MenubarItem>
+                <MenubarItem>
+                  <a href="/sales">Sales</a>
                 </MenubarItem>
               </MenubarContent>
             </MenubarMenu>

@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  rewrites: async () => {
+    return [
+      {
+        source: '/sales',
+        destination: '/app/sales/page',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
