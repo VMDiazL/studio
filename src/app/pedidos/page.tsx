@@ -46,15 +46,131 @@ const PedidosPage = () => {
     setPedidos(storedPedidos);
   }, []);
 
+  const generateReceiptContent = (pedidoKey: string, cartItems: CartItem[]) => {
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString();
+    const formattedTime = now.toLocaleTimeString();
+
+    let receiptContent = `
+      <html>
+      <head>
+        <title>Receipt - ${pedidoKey}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+          }
+          .receipt {
+            width: 250px;
+            padding: 10px;
+            border: 1px solid #ccc;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 10px;
+          }
+          .details {
+            margin-bottom: 10px;
+          }
+          .items {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          .items th, .items td {
+            border-bottom: 1px solid #eee;
+            padding: 5px;
+            text-align: left;
+          }
+          .total {
+            text-align: right;
+            font-weight: bold;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt">
+          <div class="header">
+            <h2>VentaFacil</h2>
+            <p>Receipt: ${pedidoKey}</p>
+            <p>Date: ${formattedDate} ${formattedTime}</p>
+          </div>
+          <div class="details">
+            <p>Thank you for your purchase!</p>
+          </div>
+          <table class="items">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+    `;
+
+    cartItems.forEach(item => {
+      receiptContent += `
+              <tr>
+                <td>${item.nombre_producto}</td>
+                <td>${item.cantidad}</td>
+                <td>${item.precio * item.cantidad}</td>
+              </tr>
+      `;
+    });
+
+    const total = cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+
+    receiptContent += `
+            </tbody>
+          </table>
+          <div class="total">
+            Total: $${total}
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return receiptContent;
+  };
+
   const handleProcessPedido = (pedidoKey: string) => {
-    // Implement logic to "process" the sale here
-    alert(`Pedido ${pedidoKey} processed!`);
+    const cartItems = pedidos[pedidoKey];
+    if (!cartItems) {
       toast({
-            title: "Pedido processed!",
-            description: `Pedido ${pedidoKey} processed!`,
-          });
+        variant: "destructive",
+        title: "Error",
+        description: `Pedido ${pedidoKey} not found.`,
+      });
+      return;
+    }
+
+    // Generate receipt content
+    const receiptContent = generateReceiptContent(pedidoKey, cartItems);
+
+    // Open a new window with the receipt content
+    const receiptWindow = window.open('', '_blank');
+    if (receiptWindow) {
+      receiptWindow.document.open();
+      receiptWindow.document.write(receiptContent);
+      receiptWindow.document.close();
+      receiptWindow.print(); // Automatically trigger print
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to open print window. Please check your browser settings.",
+      });
+      return;
+    }
+
+    toast({
+      title: "Pedido processed!",
+      description: `Pedido ${pedidoKey} processed!`,
+    });
     handleDeletePedido(pedidoKey);
   };
+
 
   const handleDeletePedido = (pedidoKey: string) => {
     // Delete the pedido from local storage
@@ -64,16 +180,16 @@ const PedidosPage = () => {
       const updatedPedidos = { ...pedidos };
       delete updatedPedidos[pedidoKey];
       setPedidos(updatedPedidos);
-        toast({
-            title: "Pedido deleted!",
-            description: `Pedido ${pedidoKey} deleted!`,
-          });
+      toast({
+        title: "Pedido deleted!",
+        description: `Pedido ${pedidoKey} deleted!`,
+      });
     } else {
-        toast({
-            variant: "destructive",
-            title: "Error",
-            description: `Failed to delete pedido ${pedidoKey}.`,
-          });
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: `Failed to delete pedido ${pedidoKey}.`,
+      });
     }
   };
 
