@@ -175,7 +175,7 @@ const SalesPage = () => {
 
   return (
     
-      <RootLayout username={username}>
+      
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-semibold mb-4">Sales Processing</h1>
 
@@ -261,9 +261,10 @@ const SalesPage = () => {
           </div>
         </div>
       </div>
-      </RootLayout>
+      
     
   );
 };
 
 export default SalesPage;
+

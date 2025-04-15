@@ -52,7 +52,7 @@ export default function RootLayout({
 
 
   return (
-    <html lang="en">
+    
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {isLoggedIn && (
           <header className="bg-secondary p-4">
@@ -112,6 +112,7 @@ export default function RootLayout({
         )}
         {children}
       </body>
-    </html>
+    
   );
 }
+
