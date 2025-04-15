@@ -99,6 +99,18 @@ export default function RootLayout({
                   <MenubarItem>Preferences</MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
+              <MenubarMenu>
+                   <MenubarTrigger>
+                        <ShoppingCart className="mr-2 h-4 w-4" />
+                         Ventas
+                   </MenubarTrigger>
+                   <MenubarContent>
+                        <MenubarItem>
+                             <a href="/pedidos">Pedidos</a>
+                        </MenubarItem>
+                        
+                   </MenubarContent>
+              </MenubarMenu>
             </Menubar>
             {currentUsername && (
               <div className="flex items-center justify-between">
