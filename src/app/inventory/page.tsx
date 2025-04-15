@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/hooks/use-toast";
 
 interface Product {
   codigo_producto: string;
@@ -20,6 +21,20 @@ const InventoryPage = () => {
   const [nombre_producto, setNombreProducto] = useState('');
   const [precio, setPrecio] = useState<number>(0);
   const [cantidad, setCantidad] = useState<number>(0);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Load products from local storage on component mount
+    const storedProducts = localStorage.getItem('products');
+    if (storedProducts) {
+      setProducts(JSON.parse(storedProducts));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save products to local storage whenever the products state changes
+    localStorage.setItem('products', JSON.stringify(products));
+  }, [products]);
 
   const addProduct = () => {
     if (codigo_producto && nombre_producto && precio > 0 && cantidad > 0) {
@@ -34,11 +49,25 @@ const InventoryPage = () => {
       setNombreProducto('');
       setPrecio(0);
       setCantidad(0);
+      toast({
+        title: "Product added!",
+        description: "The product has been added to the inventory.",
+      });
+    } else {
+       toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please fill in all fields.",
+      });
     }
   };
 
   const deleteProduct = (codigo_producto: string) => {
     setProducts(products.filter((product) => product.codigo_producto !== codigo_producto));
+     toast({
+        title: "Product deleted!",
+        description: "The product has been deleted from the inventory.",
+      });
   };
 
   return (
@@ -129,4 +158,3 @@ const InventoryPage = () => {
 };
 
 export default InventoryPage;
-

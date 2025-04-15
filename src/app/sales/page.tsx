@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 
 interface Product {
   codigo_producto: string;
@@ -28,16 +29,14 @@ const SalesPage = () => {
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
+  const { toast } = useToast();
 
-  // Mock product data - replace with actual data fetching
   useEffect(() => {
-    // This is dummy data. In a real app, you would fetch this from a database.
-    const mockProducts: Product[] = [
-      { codigo_producto: '1', nombre_producto: 'Product A', precio: 20, cantidad: 10 },
-      { codigo_producto: '2', nombre_producto: 'Product B', precio: 30, cantidad: 5 },
-      { codigo_producto: '3', nombre_producto: 'Product C', precio: 15, cantidad: 12 },
-    ];
-    setProducts(mockProducts);
+    // Load products from local storage on component mount
+    const storedProducts = localStorage.getItem('products');
+    if (storedProducts) {
+      setProducts(JSON.parse(storedProducts));
+    }
   }, []);
 
   useEffect(() => {
@@ -71,7 +70,17 @@ const SalesPage = () => {
         // Reset selected product and quantity
         setSelectedProductId('');
         setQuantity(1);
+          toast({
+            title: "Product added to cart!",
+            description: "The product has been added to the shopping cart.",
+          });
       }
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Please select a product and enter a quantity.",
+          });
     }
   };
 
@@ -88,6 +97,10 @@ const SalesPage = () => {
   const removeProductFromCart = (productId: string) => {
     const updatedCart = cart.filter(item => item.codigo_producto !== productId);
     setCart(updatedCart);
+     toast({
+            title: "Product removed from cart!",
+            description: "The product has been removed from the shopping cart.",
+          });
   };
 
   const processSale = () => {
@@ -95,6 +108,10 @@ const SalesPage = () => {
     // This might involve updating inventory, recording the sale, etc.
     alert('Sale processed!');
     setCart([]); // Clear the cart after processing the sale
+     toast({
+            title: "Sale processed!",
+            description: "The sale has been processed.",
+          });
   };
 
   const printReceipt = () => {
@@ -192,4 +209,3 @@ const SalesPage = () => {
 };
 
 export default SalesPage;
-
