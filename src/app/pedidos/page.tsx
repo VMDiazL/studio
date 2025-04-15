@@ -119,17 +119,19 @@ const PedidosPage = () => {
             <tbody>
     `;
 
-    cartItems.forEach(item => {
-      receiptContent += `
+    if (cartItems && Array.isArray(cartItems)) {
+        cartItems.forEach(item => {
+          receiptContent += `
               <tr>
                 <td>${item.nombre_producto}</td>
                 <td>${item.cantidad}</td>
                 <td>${item.precio * item.cantidad}</td>
               </tr>
-      `;
-    });
+        `;
+        });
+    }
 
-    const total = cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+    const total = cartItems ? cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0) : 0;
 
     receiptContent += `
             </tbody>
@@ -189,6 +191,10 @@ const PedidosPage = () => {
           if (productIndex !== -1) {
             // Update the quantity in the inventory
             products[productIndex].cantidad -= cartItem.cantidad;
+
+            // Record movement
+            const username = localStorage.getItem('username');
+            recordMovement(cartItem.codigo_producto, cartItem.nombre_producto, cartItem.cantidad, 'Salida', username);
 
             // Save the updated products back to local storage
             localStorage.setItem('products', JSON.stringify(products));
