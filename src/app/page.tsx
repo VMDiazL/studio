@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -10,6 +9,7 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -18,6 +18,13 @@ export default function Home() {
 
     if (username === 'Dakny' && password === 'Mosqueda2008') {
       router.push('/inventory');
+    } else if (username && phoneNumber) {
+      // Basic validation for name and phone number
+      if (phoneNumber.length >= 8) {
+        router.push('/sales'); // Redirect other users to the sales page
+      } else {
+        setError('Invalid phone number');
+      }
     } else {
       setError('Invalid username or password');
     }
@@ -38,12 +45,21 @@ export default function Home() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            {username === 'Dakny' ? (
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            ) : (
+              <Input
+                type="tel"
+                placeholder="Phone Number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            )}
             <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/80">
               Login
             </Button>
