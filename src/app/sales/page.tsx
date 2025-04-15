@@ -9,17 +9,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface Product {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
+  codigo_producto: string;
+  nombre_producto: string;
+  precio: number;
+  cantidad: number;
 }
 
 interface CartItem {
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
+  codigo_producto: string;
+  nombre_producto: string;
+  precio: number;
+  cantidad: number;
 }
 
 const SalesPage = () => {
@@ -33,37 +33,37 @@ const SalesPage = () => {
   useEffect(() => {
     // This is dummy data. In a real app, you would fetch this from a database.
     const mockProducts: Product[] = [
-      { id: '1', name: 'Product A', price: 20, quantity: 10 },
-      { id: '2', name: 'Product B', price: 30, quantity: 5 },
-      { id: '3', name: 'Product C', price: 15, quantity: 12 },
+      { codigo_producto: '1', nombre_producto: 'Product A', precio: 20, cantidad: 10 },
+      { codigo_producto: '2', nombre_producto: 'Product B', precio: 30, cantidad: 5 },
+      { codigo_producto: '3', nombre_producto: 'Product C', precio: 15, cantidad: 12 },
     ];
     setProducts(mockProducts);
   }, []);
 
   useEffect(() => {
     // Calculate the total whenever the cart changes
-    const newTotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const newTotal = cart.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
     setTotal(newTotal);
   }, [cart]);
 
   const addProductToCart = () => {
     if (selectedProductId && quantity > 0) {
-      const productToAdd = products.find(p => p.id === selectedProductId);
+      const productToAdd = products.find(p => p.codigo_producto === selectedProductId);
       if (productToAdd) {
-        const existingCartItemIndex = cart.findIndex(item => item.productId === selectedProductId);
+        const existingCartItemIndex = cart.findIndex(item => item.codigo_producto === selectedProductId);
 
         if (existingCartItemIndex !== -1) {
           // If the product is already in the cart, update the quantity
           const updatedCart = [...cart];
-          updatedCart[existingCartItemIndex].quantity += quantity;
+          updatedCart[existingCartItemIndex].cantidad += quantity;
           setCart(updatedCart);
         } else {
           // If the product is not in the cart, add it
           const newCartItem: CartItem = {
-            productId: productToAdd.id,
-            name: productToAdd.name,
-            price: productToAdd.price,
-            quantity: quantity,
+            codigo_producto: productToAdd.codigo_producto,
+            nombre_producto: productToAdd.nombre_producto,
+            precio: productToAdd.precio,
+            cantidad: quantity,
           };
           setCart([...cart, newCartItem]);
         }
@@ -77,8 +77,8 @@ const SalesPage = () => {
 
   const updateCartItemQuantity = (productId: string, newQuantity: number) => {
     const updatedCart = cart.map(item => {
-      if (item.productId === productId) {
-        return { ...item, quantity: newQuantity };
+      if (item.codigo_producto === productId) {
+        return { ...item, cantidad: newQuantity };
       }
       return item;
     });
@@ -86,7 +86,7 @@ const SalesPage = () => {
   };
 
   const removeProductFromCart = (productId: string) => {
-    const updatedCart = cart.filter(item => item.productId !== productId);
+    const updatedCart = cart.filter(item => item.codigo_producto !== productId);
     setCart(updatedCart);
   };
 
@@ -117,7 +117,7 @@ const SalesPage = () => {
             </SelectTrigger>
             <SelectContent>
               {products.map(product => (
-                <SelectItem key={product.id} value={product.id}>{product.name}</SelectItem>
+                <SelectItem key={product.codigo_producto} value={product.codigo_producto}>{product.nombre_producto}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -149,19 +149,19 @@ const SalesPage = () => {
               </TableHeader>
               <TableBody>
                 {cart.map(item => (
-                  <TableRow key={item.productId}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.price}</TableCell>
+                  <TableRow key={item.codigo_producto}>
+                    <TableCell>{item.nombre_producto}</TableCell>
+                    <TableCell>{item.precio}</TableCell>
                     <TableCell>
                       <Input
                         type="number"
-                        value={String(item.quantity)}
-                        onChange={(e) => updateCartItemQuantity(item.productId, Number(e.target.value))}
+                        value={String(item.cantidad)}
+                        onChange={(e) => updateCartItemQuantity(item.codigo_producto, Number(e.target.value))}
                       />
                     </TableCell>
-                    <TableCell>{item.price * item.quantity}</TableCell>
+                    <TableCell>{item.precio * item.cantidad}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size="sm" onClick={() => removeProductFromCart(item.productId)}>
+                      <Button variant="outline" size="sm" onClick={() => removeProductFromCart(item.codigo_producto)}>
                         Remove
                       </Button>
                     </TableCell>
@@ -192,3 +192,4 @@ const SalesPage = () => {
 };
 
 export default SalesPage;
+

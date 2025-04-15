@@ -8,35 +8,37 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Product {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
+  codigo_producto: string;
+  nombre_producto: string;
+  precio: number;
+  cantidad: number;
 }
 
 const InventoryPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState<number>(0);
-  const [quantity, setQuantity] = useState<number>(0);
+  const [codigo_producto, setCodigoProducto] = useState('');
+  const [nombre_producto, setNombreProducto] = useState('');
+  const [precio, setPrecio] = useState<number>(0);
+  const [cantidad, setCantidad] = useState<number>(0);
 
   const addProduct = () => {
-    if (name && price > 0 && quantity > 0) {
+    if (codigo_producto && nombre_producto && precio > 0 && cantidad > 0) {
       const newProduct: Product = {
-        id: Math.random().toString(36).substring(2, 15),
-        name,
-        price,
-        quantity,
+        codigo_producto,
+        nombre_producto,
+        precio,
+        cantidad,
       };
       setProducts([...products, newProduct]);
-      setName('');
-      setPrice(0);
-      setQuantity(0);
+      setCodigoProducto('');
+      setNombreProducto('');
+      setPrecio(0);
+      setCantidad(0);
     }
   };
 
-  const deleteProduct = (id: string) => {
-    setProducts(products.filter((product) => product.id !== id));
+  const deleteProduct = (codigo_producto: string) => {
+    setProducts(products.filter((product) => product.codigo_producto !== codigo_producto));
   };
 
   return (
@@ -50,23 +52,29 @@ const InventoryPage = () => {
         <CardContent>
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-2">
+            <Input
+                type="text"
+                placeholder="Product Code"
+                value={codigo_producto}
+                onChange={(e) => setCodigoProducto(e.target.value)}
+              />
               <Input
                 type="text"
                 placeholder="Product Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={nombre_producto}
+                onChange={(e) => setNombreProducto(e.target.value)}
               />
               <Input
                 type="number"
                 placeholder="Price"
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
+                value={precio}
+                onChange={(e) => setPrecio(Number(e.target.value))}
               />
               <Input
                 type="number"
                 placeholder="Quantity"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
+                value={cantidad}
+                onChange={(e) => setCantidad(Number(e.target.value))}
               />
               <Button onClick={addProduct}>Add</Button>
             </div>
@@ -83,6 +91,7 @@ const InventoryPage = () => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-[100px]">Code</TableHead>
                   <TableHead className="w-[100px]">Name</TableHead>
                   <TableHead>Price</TableHead>
                   <TableHead>Quantity</TableHead>
@@ -91,12 +100,13 @@ const InventoryPage = () => {
               </TableHeader>
               <TableBody>
                 {products.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell className="font-medium">{product.name}</TableCell>
-                    <TableCell>{product.price}</TableCell>
-                    <TableCell>{product.quantity}</TableCell>
+                  <TableRow key={product.codigo_producto}>
+                    <TableCell className="font-medium">{product.codigo_producto}</TableCell>
+                    <TableCell className="font-medium">{product.nombre_producto}</TableCell>
+                    <TableCell>{product.precio}</TableCell>
+                    <TableCell>{product.cantidad}</TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size="sm" onClick={() => deleteProduct(product.id)}>
+                      <Button variant="outline" size="sm" onClick={() => deleteProduct(product.codigo_producto)}>
                         Delete
                       </Button>
                     </TableCell>
@@ -104,7 +114,7 @@ const InventoryPage = () => {
                 ))}
                 {products.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center">
+                    <TableCell colSpan={5} className="text-center">
                       No products in inventory.
                     </TableCell>
                   </TableRow>
@@ -119,3 +129,4 @@ const InventoryPage = () => {
 };
 
 export default InventoryPage;
+
