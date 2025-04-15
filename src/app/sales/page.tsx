@@ -8,6 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow, TableCell } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from 'next/navigation';
+import RootLayout from '../layout';
+
 
 interface Product {
   codigo_producto: string;
@@ -51,6 +54,19 @@ const SalesPage = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const { toast } = useToast();
+  const router = useRouter();
+  const [username, setUsername] = useState('');
+
+
+   useEffect(() => {
+    // Load username from local storage on component mount
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    } else {
+        router.push('/');
+    }
+  }, []);
 
   useEffect(() => {
     // Load products from local storage on component mount
@@ -158,91 +174,95 @@ const SalesPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-semibold mb-4">Sales Processing</h1>
+    
+      <RootLayout username={username}>
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-semibold mb-4">Sales Processing</h1>
 
-      <Card className="mb-4">
-        <CardHeader>
-          <CardTitle>Add Product to Cart</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <Select value={selectedProductId} onValueChange={(value) => setSelectedProductId(value)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a product" />
-            </SelectTrigger>
-            <SelectContent>
-              {products.map(product => (
-                <SelectItem key={product.codigo_producto} value={product.codigo_producto}>{product.nombre_producto}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Input
-            type="number"
-            placeholder="Quantity"
-            value={String(quantity)}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-          />
-          <Button onClick={addProductToCart}>Add to Cart</Button>
-        </CardContent>
-      </Card>
-
-      <Card className="mb-4">
-        <CardHeader>
-          <CardTitle>Shopping Cart</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Product Name</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead>Total</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {cart.map(item => (
-                  <TableRow key={item.codigo_producto}>
-                    <TableCell>{item.nombre_producto}</TableCell>
-                    <TableCell>{item.precio}</TableCell>
-                    <TableCell>
-                      <Input
-                        type="number"
-                        value={String(item.cantidad)}
-                        onChange={(e) => updateCartItemQuantity(item.codigo_producto, Number(e.target.value))}
-                      />
-                    </TableCell>
-                    <TableCell>{item.precio * item.cantidad}</TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="outline" size="sm" onClick={() => removeProductFromCart(item.codigo_producto)}>
-                        Remove
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+        <Card className="mb-4">
+          <CardHeader>
+            <CardTitle>Add Product to Cart</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <Select value={selectedProductId} onValueChange={(value) => setSelectedProductId(value)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a product" />
+              </SelectTrigger>
+              <SelectContent>
+                {products.map(product => (
+                  <SelectItem key={product.codigo_producto} value={product.codigo_producto}>{product.nombre_producto}</SelectItem>
                 ))}
-                {cart.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center">
-                      No products in the cart.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+              </SelectContent>
+            </Select>
+            <Input
+              type="number"
+              placeholder="Quantity"
+              value={String(quantity)}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+            />
+            <Button onClick={addProductToCart}>Add to Cart</Button>
+          </CardContent>
+        </Card>
 
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Total: ${total}</h2>
-        <div>
-          <Button onClick={processSale} className="mr-2">Process Sale</Button>
-          <Button variant="secondary" onClick={printReceipt}>Print Receipt</Button>
+        <Card className="mb-4">
+          <CardHeader>
+            <CardTitle>Shopping Cart</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Product Name</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Quantity</TableHead>
+                    <TableHead>Total</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {cart.map(item => (
+                    <TableRow key={item.codigo_producto}>
+                      <TableCell>{item.nombre_producto}</TableCell>
+                      <TableCell>{item.precio}</TableCell>
+                      <TableCell>
+                        <Input
+                          type="number"
+                          value={String(item.cantidad)}
+                          onChange={(e) => updateCartItemQuantity(item.codigo_producto, Number(e.target.value))}
+                        />
+                      </TableCell>
+                      <TableCell>{item.precio * item.cantidad}</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="outline" size="sm" onClick={() => removeProductFromCart(item.codigo_producto)}>
+                          Remove
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {cart.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center">
+                        No products in the cart.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Total: ${total}</h2>
+          <div>
+            <Button onClick={processSale} className="mr-2">Process Sale</Button>
+            <Button variant="secondary" onClick={printReceipt}>Print Receipt</Button>
+          </div>
         </div>
       </div>
-    </div>
+      </RootLayout>
+    
   );
 };
 

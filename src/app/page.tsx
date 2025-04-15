@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import RootLayout from './layout';
 
 export default function Home() {
   const [username, setUsername] = useState('');
@@ -31,42 +32,45 @@ export default function Home() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-secondary">
-      <Card className="w-96">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">VentaFacil Login</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            {error && <p className="text-red-500">{error}</p>}
-            <Input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            {username === 'Dakny' ? (
+    
+      <RootLayout username={username}>
+      <div className="flex items-center justify-center h-screen bg-secondary">
+        <Card className="w-96">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">VentaFacil Login</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {error && <p className="text-red-500">{error}</p>}
               <Input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
-            ) : (
-              <Input
-                type="tel"
-                placeholder="Phone Number"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            )}
-            <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/80">
-              Login
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+              {username === 'Dakny' ? (
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              ) : (
+                <Input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+              )}
+              <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/80">
+                Login
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+      </RootLayout>
+    
   );
 }
-
