@@ -175,6 +175,28 @@ const PedidosPage = () => {
       return;
     }
 
+    // Update inventory
+    if (pedidoData.cartItems && Array.isArray(pedidoData.cartItems)) {
+      pedidoData.cartItems.forEach(cartItem => {
+        // Load existing products from local storage
+        const storedProducts = localStorage.getItem('products');
+        if (storedProducts) {
+          const products = JSON.parse(storedProducts) as Product[];
+
+          // Find the product in the inventory
+          const productIndex = products.findIndex(p => p.codigo_producto === cartItem.codigo_producto);
+
+          if (productIndex !== -1) {
+            // Update the quantity in the inventory
+            products[productIndex].cantidad -= cartItem.cantidad;
+
+            // Save the updated products back to local storage
+            localStorage.setItem('products', JSON.stringify(products));
+          }
+        }
+      });
+    }
+
     toast({
       title: "Pedido processed!",
       description: `Pedido ${pedidoKey} processed!`,
@@ -233,18 +255,24 @@ const PedidosPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {pedidoData.cartItems.map(item => (
-                      <TableRow key={item.codigo_producto}>
-                        <TableCell>{item.nombre_producto}</TableCell>
-                        <TableCell>{item.precio}</TableCell>
-                        <TableCell>{item.cantidad}</TableCell>
-                        <TableCell>{item.precio * item.cantidad}</TableCell>
+                    {pedidoData.cartItems && Array.isArray(pedidoData.cartItems) ? (
+                      pedidoData.cartItems.map(item => (
+                        <TableRow key={item.codigo_producto}>
+                          <TableCell>{item.nombre_producto}</TableCell>
+                          <TableCell>{item.precio}</TableCell>
+                          <TableCell>{item.cantidad}</TableCell>
+                          <TableCell>{item.precio * item.cantidad}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={4}>No items in this pedido.</TableCell>
                       </TableRow>
-                    ))}
+                    )}
                     <TableRow>
                       <TableCell colSpan={3} className="font-bold text-right">Total:</TableCell>
                       <TableCell className="font-bold">
-                        ${pedidoData.cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0)}
+                        ${pedidoData.cartItems ? pedidoData.cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0) : 0}
                       </TableCell>
                     </TableRow>
                   </TableBody>
