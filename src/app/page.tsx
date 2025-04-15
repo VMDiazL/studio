@@ -1,3 +1,55 @@
+
+"use client";
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
 export default function Home() {
-  return <></>;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (username === 'Dakny' && password === 'Mosqueda2008') {
+      router.push('/inventory');
+    } else {
+      setError('Invalid username or password');
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center h-screen bg-secondary">
+      <Card className="w-96">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">VentaFacil Login</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {error && <p className="text-red-500">{error}</p>}
+            <Input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/80">
+              Login
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
