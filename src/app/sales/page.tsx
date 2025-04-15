@@ -169,26 +169,12 @@ const SalesPage = () => {
     // Save the current cart to local storage under the new key
     addPedido(pedidoKey, cart);
 
-     // Update product quantities in local storage
-    const updatedProducts = products.map(product => {
-      const cartItem = cart.find(item => item.codigo_producto === product.codigo_producto);
-      if (cartItem) {
-        recordMovement(product.codigo_producto, product.nombre_producto, cartItem.cantidad, 'Salida', username);
-        return { ...product, cantidad: product.cantidad - cartItem.cantidad };
-      }
-      return product;
+    toast({
+      title: "Tu solicitud de compra, se ha registrado exitosamente",
+      description: "Espera que Dakny procese tu pedido ...",
     });
-    localStorage.setItem('products', JSON.stringify(updatedProducts));
-    setProducts(updatedProducts);
 
-    // Implement sale processing logic here.
-    // This might involve updating inventory, recording the sale, etc.
-    alert('Sale processed and saved!');
-    setCart([]); // Clear the cart after processing the sale
-     toast({
-            title: "Sale processed!",
-            description: "The sale has been processed.",
-          });
+    setCart([]);
   };
 
   const printReceipt = () => {
