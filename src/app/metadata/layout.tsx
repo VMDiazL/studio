@@ -1,3 +1,5 @@
+use client";
+
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,10 +14,11 @@ interface Props {
 }
 const Layout = ({ children }: Props) => {
     return (
-        <>
+        <html lang="en">
             {children}
-        </>
+        </html>
     );
 };
 
 export default Layout;
+
