@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
 import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from '@/components/ui/menubar';
-import {Home, Plus, Settings, Shop} from "lucide-react";
+import {Home, Plus, Settings, ShoppingCart} from "lucide-react";
 import { Icons } from '@/components/icons';
 
 const geistSans = Geist({
@@ -52,6 +52,17 @@ export default function RootLayout({
                 </MenubarItem>
                 <MenubarItem>
                   <a href="/sales">Sales</a>
+                </MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+             <MenubarMenu>
+              <MenubarTrigger>
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Pedidos
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>
+                  <a href="/pedidos">View Pedidos</a>
                 </MenubarItem>
               </MenubarContent>
             </MenubarMenu>

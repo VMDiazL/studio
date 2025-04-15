@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 
 interface Product {
@@ -22,6 +22,27 @@ interface CartItem {
   precio: number;
   cantidad: number;
 }
+
+// Helper functions to manage "pedidos" (shopping carts) in local storage
+const getPedidos = (): { [key: string]: CartItem[] } => {
+  try {
+    const pedidosString = localStorage.getItem('pedidos');
+    return pedidosString ? JSON.parse(pedidosString) : {};
+  } catch (error) {
+    console.error("Error retrieving pedidos from localStorage:", error);
+    return {};
+  }
+};
+
+const addPedido = (pedidoKey: string, cart: CartItem[]) => {
+  try {
+    const existingPedidos = getPedidos();
+    const updatedPedidos = { ...existingPedidos, [pedidoKey]: cart };
+    localStorage.setItem('pedidos', JSON.stringify(updatedPedidos));
+  } catch (error) {
+    console.error("Error adding pedido to localStorage:", error);
+  }
+};
 
 const SalesPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -104,9 +125,15 @@ const SalesPage = () => {
   };
 
   const processSale = () => {
+    // Generate a unique key for the "pedido"
+    const pedidoKey = `pedido_${new Date().getTime()}`;
+
+    // Save the current cart to local storage under the new key
+    addPedido(pedidoKey, cart);
+
     // Implement sale processing logic here.
     // This might involve updating inventory, recording the sale, etc.
-    alert('Sale processed!');
+    alert('Sale processed and saved!');
     setCart([]); // Clear the cart after processing the sale
      toast({
             title: "Sale processed!",
