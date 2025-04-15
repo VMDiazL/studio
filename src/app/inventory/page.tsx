@@ -21,6 +21,8 @@ const InventoryPage = () => {
   const [nombre_producto, setNombreProducto] = useState('');
   const [precio, setPrecio] = useState<number>(0);
   const [cantidad, setCantidad] = useState<number>(0);
+  const [receiveCodigoProducto, setReceiveCodigoProducto] = useState('');
+  const [receiveCantidad, setReceiveCantidad] = useState<number>(0);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -70,6 +72,31 @@ const InventoryPage = () => {
       });
   };
 
+  const receiveProducts = () => {
+    if (receiveCodigoProducto && receiveCantidad > 0) {
+      const updatedProducts = products.map(product => {
+        if (product.codigo_producto === receiveCodigoProducto) {
+          return { ...product, cantidad: product.cantidad + receiveCantidad };
+        }
+        return product;
+      });
+      setProducts(updatedProducts);
+      setReceiveCodigoProducto('');
+      setReceiveCantidad(0);
+      toast({
+        title: "Products received!",
+        description: "The products have been added to the inventory.",
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please fill in all fields.",
+      });
+    }
+  };
+
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4">Inventory Management</h1>
@@ -106,6 +133,31 @@ const InventoryPage = () => {
                 onChange={(e) => setCantidad(Number(e.target.value))}
               />
               <Button onClick={addProduct}>Add</Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+       <Card className="mb-4">
+        <CardHeader>
+          <CardTitle>Receive Products</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            <div className="grid grid-cols-2 gap-2">
+              <Input
+                type="text"
+                placeholder="Product Code"
+                value={receiveCodigoProducto}
+                onChange={(e) => setReceiveCodigoProducto(e.target.value)}
+              />
+              <Input
+                type="number"
+                placeholder="Quantity Received"
+                value={receiveCantidad}
+                onChange={(e) => setReceiveCantidad(Number(e.target.value))}
+              />
+              <Button onClick={receiveProducts}>Receive</Button>
             </div>
           </div>
         </CardContent>
@@ -158,3 +210,5 @@ const InventoryPage = () => {
 };
 
 export default InventoryPage;
+
+    
