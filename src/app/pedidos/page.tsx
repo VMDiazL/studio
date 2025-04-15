@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow, TableCell } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from 'next/navigation';
 
 interface CartItem {
   codigo_producto: string;
@@ -39,6 +40,7 @@ const deletePedido = (pedidoKey: string) => {
 const PedidosPage = () => {
   const [pedidos, setPedidos] = useState<{ [key: string]: CartItem[] }>({});
   const { toast } = useToast();
+    const router = useRouter();
 
   useEffect(() => {
     // Load "pedidos" from local storage on component mount
@@ -196,6 +198,10 @@ const PedidosPage = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4">Pedidos (Shopping Carts)</h1>
+
+       <Button onClick={() => router.push('/')} variant="outline" className="mb-4">
+        Go to Home
+      </Button>
 
       {Object.keys(pedidos).length === 0 ? (
         <p>No pedidos saved.</p>

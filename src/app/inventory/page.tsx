@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from 'next/navigation';
 
 interface Product {
   codigo_producto: string;
@@ -24,6 +25,7 @@ const InventoryPage = () => {
   const [receiveCodigoProducto, setReceiveCodigoProducto] = useState('');
   const [receiveCantidad, setReceiveCantidad] = useState<number>(0);
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     // Load products from local storage on component mount
@@ -100,6 +102,10 @@ const InventoryPage = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4">Inventory Management</h1>
+
+       <Button onClick={() => router.push('/')} variant="outline" className="mb-4">
+        Go to Home
+      </Button>
 
       <Card className="mb-4">
         <CardHeader>

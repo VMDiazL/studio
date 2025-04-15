@@ -177,6 +177,11 @@ const SalesPage = () => {
     
       
       <div className="container mx-auto p-4">
+
+       <Button onClick={() => router.push('/')} variant="outline" className="mb-4">
+        Go to Home
+      </Button>
+
         <h1 className="text-2xl font-semibold mb-4">Sales Processing</h1>
 
         <Card className="mb-4">
@@ -267,4 +272,3 @@ const SalesPage = () => {
 };
 
 export default SalesPage;
-
