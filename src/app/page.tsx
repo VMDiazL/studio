@@ -20,11 +20,7 @@ export default function Home() {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setIsLoggedIn(true);
-      if (storedUsername === 'Dakny') {
-        router.push('/inventory');
-      } else {
         router.push('/sales');
-      }
     }
   }, [router]);
 
@@ -90,4 +86,5 @@ export default function Home() {
     </>
   );
 }
+
 
