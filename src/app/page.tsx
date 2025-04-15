@@ -51,18 +51,6 @@ export default function Home() {
 
   return (
     <>
-      {isLoggedIn ? (
-        <RootLayout username={username}>
-          {/* This should ideally never be rendered. If it is, it means that the useEffect redirect failed. */}
-          <div className="flex items-center justify-center h-screen bg-secondary">
-            <Card className="w-96">
-              <CardContent>
-                <p className="text-center">You are logged in as {username}. This page should have redirected you.</p>
-              </CardContent>
-            </Card>
-          </div>
-        </RootLayout>
-      ) : (
         <div className="flex items-center justify-center h-screen bg-secondary">
           <Card className="w-96">
             <CardHeader>
@@ -99,7 +87,6 @@ export default function Home() {
             </CardContent>
           </Card>
         </div>
-      )}
     </>
   );
 }
