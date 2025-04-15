@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import RootLayout from './layout';
 
 export default function Home() {
   const [username, setUsername] = useState('');
@@ -20,7 +19,12 @@ export default function Home() {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setIsLoggedIn(true);
+      // Redirect based on username
+      if (storedUsername === 'Dakny') {
+        router.push('/inventory');
+      } else {
         router.push('/sales');
+      }
     }
   }, [router]);
 
@@ -86,5 +90,3 @@ export default function Home() {
     </>
   );
 }
-
-
