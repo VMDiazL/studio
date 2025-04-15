@@ -82,6 +82,28 @@ const SalesPage = () => {
     setTotal(newTotal);
   }, [cart]);
 
+    const recordMovement = (codigo_producto: string, nombre_producto: string, cantidad: number, tipo: 'Entrada' | 'Salida', usuario: string | null) => {
+    const timestamp = new Date().toLocaleString();
+    const newMovement = {
+      timestamp,
+      codigo_producto,
+      nombre_producto,
+      cantidad,
+      tipo,
+      usuario,
+    };
+
+    // Load existing movements from local storage
+    const storedMovements = localStorage.getItem('movements');
+    const existingMovements = storedMovements ? JSON.parse(storedMovements) : [];
+
+    // Add the new movement to the existing movements
+    const updatedMovements = [...existingMovements, newMovement];
+
+    // Save the updated movements back to local storage
+    localStorage.setItem('movements', JSON.stringify(updatedMovements));
+  };
+
   const addProductToCart = () => {
     if (selectedProductId && quantity > 0) {
       const productToAdd = products.find(p => p.codigo_producto === selectedProductId);
@@ -151,6 +173,7 @@ const SalesPage = () => {
     const updatedProducts = products.map(product => {
       const cartItem = cart.find(item => item.codigo_producto === product.codigo_producto);
       if (cartItem) {
+        recordMovement(product.codigo_producto, product.nombre_producto, cartItem.cantidad, 'Salida', username);
         return { ...product, cantidad: product.cantidad - cartItem.cantidad };
       }
       return product;

@@ -26,12 +26,17 @@ const InventoryPage = () => {
   const [receiveCantidad, setReceiveCantidad] = useState<number>(0);
   const { toast } = useToast();
   const router = useRouter();
+    const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
     // Load products from local storage on component mount
     const storedProducts = localStorage.getItem('products');
     if (storedProducts) {
       setProducts(JSON.parse(storedProducts));
+    }
+      const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
     }
   }, []);
 
@@ -49,6 +54,10 @@ const InventoryPage = () => {
         cantidad,
       };
       setProducts([...products, newProduct]);
+
+       // Record movement
+      recordMovement(codigo_producto, nombre_producto, cantidad, 'Entrada', username);
+
       setCodigoProducto('');
       setNombreProducto('');
       setPrecio(0);
@@ -83,6 +92,11 @@ const InventoryPage = () => {
         return product;
       });
       setProducts(updatedProducts);
+
+      // Record movement
+      const product = products.find(p => p.codigo_producto === receiveCodigoProducto);
+      recordMovement(receiveCodigoProducto, product ? product.nombre_producto : 'Unknown', receiveCantidad, 'Entrada', username);
+
       setReceiveCodigoProducto('');
       setReceiveCantidad(0);
       toast({
@@ -96,6 +110,28 @@ const InventoryPage = () => {
         description: "Please fill in all fields.",
       });
     }
+  };
+
+  const recordMovement = (codigo_producto: string, nombre_producto: string, cantidad: number, tipo: 'Entrada' | 'Salida', usuario: string | null) => {
+    const timestamp = new Date().toLocaleString();
+    const newMovement = {
+      timestamp,
+      codigo_producto,
+      nombre_producto,
+      cantidad,
+      tipo,
+      usuario,
+    };
+
+    // Load existing movements from local storage
+    const storedMovements = localStorage.getItem('movements');
+    const existingMovements = storedMovements ? JSON.parse(storedMovements) : [];
+
+    // Add the new movement to the existing movements
+    const updatedMovements = [...existingMovements, newMovement];
+
+    // Save the updated movements back to local storage
+    localStorage.setItem('movements', JSON.stringify(updatedMovements));
   };
 
 

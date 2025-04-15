@@ -4,11 +4,12 @@ import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
 import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from '@/components/ui/menubar';
-import {Home, Plus, Settings, ShoppingCart, PackagePlus} from "lucide-react";
+import {Home, Plus, Settings, ShoppingCart, Archive} from "lucide-react";
 import { Icons } from '@/components/icons';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Toaster } from '@/components/ui/toaster';
 
 
 const geistSans = Geist({
@@ -81,11 +82,26 @@ export default function RootLayout({
                     <MenubarItem>
                       <a href="/sales">Sales</a>
                     </MenubarItem>
+                     <MenubarItem>
+                      <a href="/compras">Compras</a>
+                    </MenubarItem>
                     <MenubarItem>
                       <a href="/pedidos">Pedidos</a>
                     </MenubarItem>
-                    <MenubarItem>
-                      <a href="/compras">Compras</a>
+                    
+                  </MenubarContent>
+                </MenubarMenu>
+              )}
+
+              {currentUsername === 'Dakny' && (
+                <MenubarMenu>
+                 <MenubarTrigger>
+                    <Archive className="mr-2 h-4 w-4" />
+                    Movements
+                  </MenubarTrigger>
+                  <MenubarContent>
+                     <MenubarItem>
+                      <a href="/movimientos">Movements</a>
                     </MenubarItem>
                   </MenubarContent>
                 </MenubarMenu>
@@ -132,6 +148,7 @@ export default function RootLayout({
           </header>
         )}
         {children}
+         <Toaster />
       </body>
     </html>
   );
