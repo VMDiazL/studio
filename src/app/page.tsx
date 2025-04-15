@@ -39,6 +39,7 @@ export default function Home() {
       // Basic validation for name and phone number
       if (phoneNumber.length >= 8) {
         localStorage.setItem('username', username);
+        localStorage.setItem('phoneNumber', phoneNumber);
         setIsLoggedIn(true);
         router.push('/sales'); // Redirect other users to the sales page
       } else {

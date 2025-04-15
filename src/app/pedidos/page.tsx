@@ -15,7 +15,13 @@ interface CartItem {
   cantidad: number;
 }
 
-const getPedidos = (): { [key: string]: CartItem[] } => {
+interface PedidoData {
+  cartItems: CartItem[];
+  username: string;
+  phoneNumber?: string;
+}
+
+const getPedidos = (): { [key: string]: PedidoData } => {
   try {
     const pedidosString = localStorage.getItem('pedidos');
     return pedidosString ? JSON.parse(pedidosString) : {};
@@ -38,9 +44,9 @@ const deletePedido = (pedidoKey: string) => {
 };
 
 const PedidosPage = () => {
-  const [pedidos, setPedidos] = useState<{ [key: string]: CartItem[] }>({});
+  const [pedidos, setPedidos] = useState<{ [key: string]: PedidoData }>({});
   const { toast } = useToast();
-    const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     // Load "pedidos" from local storage on component mount
@@ -48,7 +54,8 @@ const PedidosPage = () => {
     setPedidos(storedPedidos);
   }, []);
 
-  const generateReceiptContent = (pedidoKey: string, cartItems: CartItem[]) => {
+  const generateReceiptContent = (pedidoKey: string, pedidoData: PedidoData) => {
+    const { cartItems, username, phoneNumber } = pedidoData;
     const now = new Date();
     const formattedDate = now.toLocaleDateString();
     const formattedTime = now.toLocaleTimeString();
@@ -97,6 +104,8 @@ const PedidosPage = () => {
             <p>Date: ${formattedDate} ${formattedTime}</p>
           </div>
           <div class="details">
+            <p>Customer: ${username}</p>
+            ${phoneNumber ? `<p>Phone: ${phoneNumber}</p>` : ''}
             <p>Thank you for your purchase!</p>
           </div>
           <table class="items">
@@ -137,8 +146,8 @@ const PedidosPage = () => {
   };
 
   const handleProcessPedido = (pedidoKey: string) => {
-    const cartItems = pedidos[pedidoKey];
-    if (!cartItems) {
+    const pedidoData = pedidos[pedidoKey];
+    if (!pedidoData) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -148,7 +157,7 @@ const PedidosPage = () => {
     }
 
     // Generate receipt content
-    const receiptContent = generateReceiptContent(pedidoKey, cartItems);
+    const receiptContent = generateReceiptContent(pedidoKey, pedidoData);
 
     // Open a new window with the receipt content
     const receiptWindow = window.open('', '_blank');
@@ -206,10 +215,11 @@ const PedidosPage = () => {
       {Object.keys(pedidos).length === 0 ? (
         <p>No pedidos saved.</p>
       ) : (
-        Object.entries(pedidos).map(([pedidoKey, cartItems]) => (
+        Object.entries(pedidos).map(([pedidoKey, pedidoData]) => (
           <Card key={pedidoKey} className="mb-4">
             <CardHeader>
               <CardTitle>Pedido: {pedidoKey}</CardTitle>
+              <CardTitle>Customer: {pedidoData.username} {pedidoData.phoneNumber ? `(${pedidoData.phoneNumber})` : ''}</CardTitle>
             </CardHeader>
             <CardContent>
               <ScrollArea>
@@ -223,7 +233,7 @@ const PedidosPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {cartItems.map(item => (
+                    {pedidoData.cartItems.map(item => (
                       <TableRow key={item.codigo_producto}>
                         <TableCell>{item.nombre_producto}</TableCell>
                         <TableCell>{item.precio}</TableCell>
@@ -234,7 +244,7 @@ const PedidosPage = () => {
                     <TableRow>
                       <TableCell colSpan={3} className="font-bold text-right">Total:</TableCell>
                       <TableCell className="font-bold">
-                        ${cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0)}
+                        ${pedidoData.cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0)}
                       </TableCell>
                     </TableRow>
                   </TableBody>

@@ -26,8 +26,14 @@ interface CartItem {
   cantidad: number;
 }
 
+interface PedidoData {
+  cartItems: CartItem[];
+  username: string;
+  phoneNumber?: string;
+}
+
 // Helper functions to manage "pedidos" (shopping carts) in local storage
-const getPedidos = (): { [key: string]: CartItem[] } => {
+const getPedidos = (): { [key: string]: PedidoData } => {
   try {
     const pedidosString = localStorage.getItem('pedidos');
     return pedidosString ? JSON.parse(pedidosString) : {};
@@ -37,10 +43,10 @@ const getPedidos = (): { [key: string]: CartItem[] } => {
   }
 };
 
-const addPedido = (pedidoKey: string, cart: CartItem[]) => {
+const addPedido = (pedidoKey: string, pedidoData: PedidoData) => {
   try {
     const existingPedidos = getPedidos();
-    const updatedPedidos = { ...existingPedidos, [pedidoKey]: cart };
+    const updatedPedidos = { ...existingPedidos, [pedidoKey]: pedidoData };
     localStorage.setItem('pedidos', JSON.stringify(updatedPedidos));
   } catch (error) {
     console.error("Error adding pedido to localStorage:", error);
@@ -56,6 +62,7 @@ const SalesPage = () => {
   const { toast } = useToast();
   const router = useRouter();
   const [username, setUsername] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
 
    useEffect(() => {
@@ -65,6 +72,14 @@ const SalesPage = () => {
       setUsername(storedUsername);
     } else {
         router.push('/');
+    }
+  }, []);
+
+    useEffect(() => {
+    // Load phoneNumber from local storage on component mount
+    const storedPhoneNumber = localStorage.getItem('phoneNumber');
+    if (storedPhoneNumber) {
+      setPhoneNumber(storedPhoneNumber);
     }
   }, []);
 
@@ -166,8 +181,14 @@ const SalesPage = () => {
     // Generate a unique key for the "pedido"
     const pedidoKey = `pedido_${new Date().getTime()}`;
 
+    const pedidoData: PedidoData = {
+      cartItems: cart,
+      username: username,
+      phoneNumber: phoneNumber,
+    };
+
     // Save the current cart to local storage under the new key
-    addPedido(pedidoKey, cart);
+    addPedido(pedidoKey, pedidoData);
 
     toast({
       title: "Tu solicitud de compra, se ha registrado exitosamente",
