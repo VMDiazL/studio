@@ -68,48 +68,57 @@ export default function RootLayout({
                   </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
-              <MenubarMenu>
-                <MenubarTrigger>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Generate
-                </MenubarTrigger>
-                <MenubarContent>
-                  <MenubarItem>
-                    <a href="/inventory">Inventory</a>
-                  </MenubarItem>
-                  <MenubarItem>
-                    <a href="/sales">Sales</a>
-                  </MenubarItem>
-                  <MenubarItem>
-                    <a href="/pedidos">Pedidos</a>
-                  </MenubarItem>
-                  <MenubarItem>
-                    <a href="/compras">Compras</a>
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
+              {currentUsername === 'Dakny' && (
+                <MenubarMenu>
+                  <MenubarTrigger>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Generate
+                  </MenubarTrigger>
+                  <MenubarContent>
+                    <MenubarItem>
+                      <a href="/inventory">Inventory</a>
+                    </MenubarItem>
+                    <MenubarItem>
+                      <a href="/sales">Sales</a>
+                    </MenubarItem>
+                    <MenubarItem>
+                      <a href="/pedidos">Pedidos</a>
+                    </MenubarItem>
+                    <MenubarItem>
+                      <a href="/compras">Compras</a>
+                    </MenubarItem>
+                  </MenubarContent>
+                </MenubarMenu>
+              )}
+
+              {currentUsername === 'Dakny' && (
+                <MenubarMenu>
+                  <MenubarTrigger>
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </MenubarTrigger>
+                  <MenubarContent>
+                    <MenubarItem>Profile</MenubarItem>
+                    <MenubarItem>Preferences</MenubarItem>
+                  </MenubarContent>
+                </MenubarMenu>
+              )}
 
               <MenubarMenu>
                 <MenubarTrigger>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  Ventas
                 </MenubarTrigger>
                 <MenubarContent>
-                  <MenubarItem>Profile</MenubarItem>
-                  <MenubarItem>Preferences</MenubarItem>
+                  <MenubarItem>
+                    <a href="/sales">Sales</a>
+                  </MenubarItem>
+                  {currentUsername === 'Dakny' && (
+                  <MenubarItem>
+                    <a href="/pedidos">Pedidos</a>
+                  </MenubarItem>
+                  )}
                 </MenubarContent>
-              </MenubarMenu>
-              <MenubarMenu>
-                   <MenubarTrigger>
-                        <ShoppingCart className="mr-2 h-4 w-4" />
-                         Ventas
-                   </MenubarTrigger>
-                   <MenubarContent>
-                        <MenubarItem>
-                             <a href="/pedidos">Pedidos</a>
-                        </MenubarItem>
-                        
-                   </MenubarContent>
               </MenubarMenu>
             </Menubar>
             {currentUsername && (
