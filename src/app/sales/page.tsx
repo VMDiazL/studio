@@ -119,109 +119,109 @@ const SalesPage = () => {
 
   return (
     <>
-      <Button onClick={() => router.push('/home')} variant="outline" className="mb-4">
-        Go to Home
-      </Button>
+        <Button onClick={() => router.push('/home')} variant="outline" className="mb-4">
+            Go to Home
+        </Button>
         {username && (
-           <div className="text-sm ml-4">Logged in as: {username}</div>
+            <div className="text-sm ml-4">Logged in as: {username}</div>
         )}
 
-      <h1 className="text-2xl font-semibold mb-4">Sales</h1>
+        <h1 className="text-2xl font-semibold mb-4">Sales</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Products</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[400px] w-full rounded-md border">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Nombre</TableHead>
-                            <TableHead>Precio</TableHead>
-                            <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {products.map((product) => (
-                            <TableRow key={product.codigo_producto}>
-                                <TableCell>{product.nombre_producto}</TableCell>
-                                <TableCell>{product.precio}</TableCell>
-                                <TableCell className="text-right">
-                                    <Button size="sm" onClick={() => addToCart(product)}>
-                                        Add to Cart
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                         {products.length === 0 && (
-                            <TableRow>
-                                <TableCell colSpan={3} className="text-center">
-                                    No products in inventory.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </ScrollArea>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Products</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <ScrollArea className="h-[400px] w-full rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Nombre</TableHead>
+                                    <TableHead>Precio</TableHead>
+                                    <TableHead className="text-right">Acciones</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {products.map((product) => (
+                                    <TableRow key={product.codigo_producto}>
+                                        <TableCell>{product.nombre_producto}</TableCell>
+                                        <TableCell>{product.precio}</TableCell>
+                                        <TableCell className="text-right">
+                                            <Button size="sm" onClick={() => addToCart(product)}>
+                                                Add to Cart
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                                {products.length === 0 && (
+                                    <TableRow>
+                                        <TableCell colSpan={3} className="text-center">
+                                            No products in inventory.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </ScrollArea>
+                </CardContent>
+            </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Cart</CardTitle>
-          </CardHeader>
-          <CardContent>
-               <ScrollArea className="h-[400px] w-full rounded-md border">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Nombre</TableHead>
-                            <TableHead>Precio</TableHead>
-                            <TableHead>Cantidad</TableHead>
-                            <TableHead>Total</TableHead>
-                            <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {cart.map(item => (
-                            <TableRow key={item.codigo_producto}>
-                                <TableCell>{item.nombre_producto}</TableCell>
-                                <TableCell>{item.precio}</TableCell>
-                                <TableCell>{item.cantidad}</TableCell>
-                                <TableCell>{item.precio * item.cantidad}</TableCell>
-                                <TableCell className="text-right">
-                                    <Button variant="ghost" size="sm" onClick={() => removeFromCart(item.codigo_producto)}>
-                                        Remove
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                         {cart.length === 0 && (
-                            <TableRow>
-                                <TableCell colSpan={5} className="text-center">
-                                    No products in the cart.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </ScrollArea>
-            <div className="mt-4 flex justify-between">
-              <span className="text-xl">Total: ${total}</span>
-              <div>
-                <Button className="mr-2" variant="outline" onClick={clearCart}>
-                  Clear Cart
-                </Button>
-                <Button onClick={processSale}>Process Sale</Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Cart</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <ScrollArea className="h-[400px] w-full rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Nombre</TableHead>
+                                    <TableHead>Precio</TableHead>
+                                    <TableHead>Cantidad</TableHead>
+                                    <TableHead>Total</TableHead>
+                                    <TableHead className="text-right">Acciones</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {cart.map(item => (
+                                    <TableRow key={item.codigo_producto}>
+                                        <TableCell>{item.nombre_producto}</TableCell>
+                                        <TableCell>{item.precio}</TableCell>
+                                        <TableCell>{item.cantidad}</TableCell>
+                                        <TableCell>{item.precio * item.cantidad}</TableCell>
+                                        <TableCell className="text-right">
+                                            <Button variant="ghost" size="sm" onClick={() => removeFromCart(item.codigo_producto)}>
+                                                Remove
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                                {cart.length === 0 && (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center">
+                                            No products in the cart.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </ScrollArea>
+                    <div className="mt-4 flex justify-between">
+                        <span className="text-xl">Total: ${total}</span>
+                        <div>
+                            <Button className="mr-2" variant="outline" onClick={clearCart}>
+                                Clear Cart
+                            </Button>
+                            <Button onClick={processSale}>Process Sale</Button>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     </>
-  );
+);
 };
 
 export default SalesPage;

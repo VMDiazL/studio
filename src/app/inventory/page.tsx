@@ -55,9 +55,8 @@ const InventoryPage = () => {
   };
 
   const addProduct = () => {
-    if (newProduct.nombre_producto && newProduct.precio > 0 && newProduct.cantidad > 0) {
-      const codigo_producto = uuidv4();
-      setProducts(prevProducts => [...prevProducts, { ...newProduct, codigo_producto }]);
+    if (newProduct.nombre_producto && newProduct.precio > 0 && newProduct.cantidad > 0 && newProduct.codigo_producto) {
+      setProducts(prevProducts => [...prevProducts, { ...newProduct }]);
       setNewProduct({
         codigo_producto: '',
         nombre_producto: '',
@@ -69,6 +68,13 @@ const InventoryPage = () => {
                 description: "El producto se agregó correctamente al inventario.",
             })
     }
+      else {
+          toast({
+              title: "Error",
+              description: "Por favor, complete todos los campos.",
+              variant: "destructive"
+          })
+      }
   };
 
   const deleteProduct = (codigo_producto) => {
@@ -94,6 +100,17 @@ const InventoryPage = () => {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">
+              <div>
+                <Label htmlFor="codigo_producto">Product Code</Label>
+                <Input
+                  type="text"
+                  id="codigo_producto"
+                  name="codigo_producto"
+                  value={newProduct.codigo_producto}
+                  onChange={handleInputChange}
+                  placeholder="Product Code"
+                />
+              </div>
               <div>
                 <Label htmlFor="nombre_producto">Product Name</Label>
                 <Input
