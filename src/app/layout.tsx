@@ -90,6 +90,20 @@ export default function RootLayout({
               </MenubarMenu>
               )}
 
+              {currentUsername === 'Dakny' && (
+                <MenubarMenu>
+                 <MenubarTrigger>
+                    <Archive className="mr-2 h-4 w-4" />
+                    Movements
+                  </MenubarTrigger>
+                  <MenubarContent>
+                     <MenubarItem>
+                      <a href="/movimientos">Movements</a>
+                    </MenubarItem>
+                  </MenubarContent>
+                </MenubarMenu>
+              )}
+
               {currentUsername === 'Dakny' && (                
                 <MenubarMenu>
                   <MenubarTrigger>
@@ -112,25 +126,7 @@ export default function RootLayout({
                     
                   </MenubarContent>
                 </MenubarMenu>
-              )}
-
-              {currentUsername === 'Dakny' && (
-                <MenubarMenu>
-                 <MenubarTrigger>
-                    <Archive className="mr-2 h-4 w-4" />
-                    Movements
-                  </MenubarTrigger>
-                  <MenubarContent>
-                     <MenubarItem>
-                      <a href="/movimientos">Movements</a>
-                    </MenubarItem>
-                  </MenubarContent>
-                </MenubarMenu>
-              )}
-
-              
-
-              
+              )}                      
 
             </Menubar>
             {currentUsername && (

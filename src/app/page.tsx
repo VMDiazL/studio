@@ -19,12 +19,8 @@ export default function Home() {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setIsLoggedIn(true);
-      // Redirect based on username
-      if (storedUsername === 'Dakny') {
-        router.push('/inventory');
-      } else {
-        router.push('/sales');
-      }
+      // Redirect to home page
+        router.push('/home');
     }
   }, [router]);
 
@@ -34,7 +30,7 @@ export default function Home() {
     if (username === 'Dakny' && password === 'Mosqueda2008') {
       localStorage.setItem('username', username);
       setIsLoggedIn(true);
-      router.push('/inventory');
+      router.push('/home');
     } else if (username && phoneNumber) {
       // Basic validation for name and phone number
       if (phoneNumber.length >= 8) {
