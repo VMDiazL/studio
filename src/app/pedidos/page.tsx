@@ -36,55 +36,32 @@ const PedidosPage = () => {
 
     const generateReceiptContent = (pedidoData) => {
         if (!pedidoData || !pedidoData.cartItems) {
-            return "<p>No hay datos de carrito para generar el recibo.</p>";
+            return "No hay datos de carrito para generar el recibo.";
         }
 
         let receiptContent = `
-      <html>
-      <head>
-        <title>Receipt</title>
-        <style>
-          body { font-family: Arial, sans-serif; }
-          table { width: 100%; border-collapse: collapse; }
-          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-          th { background-color: #f2f2f2; }
-        </style>
-      </head>
-      <body>
-        <h1>Receipt</h1>
-        <p>Date: ${new Date().toLocaleDateString()}</p>
-        <p>Time: ${new Date().toLocaleTimeString()}</p>
-        <p>Username: ${pedidoData.username}</p>
-        <p>Phone Number: ${pedidoData.phoneNumber}</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-    `;
+      --------------------------------
+              VentaFacil - Receipt
+      --------------------------------
+      Date: ${new Date().toLocaleDateString()}
+      Time: ${new Date().toLocaleTimeString()}
+      Username: ${pedidoData.username}
+      Phone Number: ${pedidoData.phoneNumber}
+      --------------------------------
+      Products:
+      `;
 
         pedidoData.cartItems.forEach(item => {
             receiptContent += `
-              <tr>
-                <td>${item.nombre_producto}</td>
-                <td>${item.precio}</td>
-                <td>${item.cantidad}</td>
-                <td>${item.precio * item.cantidad}</td>
-              </tr>
+        ${item.nombre_producto}
+        Price: ${item.precio} x Qty: ${item.cantidad} = ${item.precio * item.cantidad}
         `;
         });
 
         receiptContent += `
-          </tbody>
-        </table>
-        <p>Total: ${pedidoData.cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0)}</p>
-      </body>
-      </html>
+      --------------------------------
+      Total: ${pedidoData.cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0)}
+      --------------------------------
     `;
 
         return receiptContent;
@@ -101,7 +78,7 @@ const PedidosPage = () => {
         // Open a new window with the receipt content
         const receiptWindow = window.open('', '_blank');
         receiptWindow.document.open();
-        receiptWindow.document.write(receiptContent);
+        receiptWindow.document.write(`<pre>${receiptContent}</pre>`);
         receiptWindow.document.close();
 
         // Eliminar el pedido del localStorage
@@ -117,36 +94,41 @@ const PedidosPage = () => {
     };
 
     const getPedidoDetails = (pedidoId) => {
-        const pedidoData = JSON.parse(localStorage.getItem(pedidoId));
+        try {
+            const pedidoData = JSON.parse(localStorage.getItem(pedidoId));
 
-        if (!pedidoData || !pedidoData.cartItems) {
-            return <p>No hay datos de carrito para mostrar.</p>;
-        }
+            if (!pedidoData || !pedidoData.cartItems) {
+                return <p>No hay datos de carrito para mostrar.</p>;
+            }
 
-        return (
-            <ScrollArea className="h-[200px] w-full rounded-md border">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Product</TableHead>
-                            <TableHead>Price</TableHead>
-                            <TableHead>Quantity</TableHead>
-                            <TableHead>Total</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {pedidoData.cartItems.map(item => (
-                            <TableRow key={item.codigo_producto}>
-                                <TableCell>{item.nombre_producto}</TableCell>
-                                <TableCell>{item.precio}</TableCell>
-                                <TableCell>{item.cantidad}</TableCell>
-                                <TableCell>{item.precio * item.cantidad}</TableCell>
+            return (
+                <ScrollArea className="h-[200px] w-full rounded-md border">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Product</TableHead>
+                                <TableHead>Price</TableHead>
+                                <TableHead>Quantity</TableHead>
+                                <TableHead>Total</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </ScrollArea>
-        );
+                        </TableHeader>
+                        <TableBody>
+                            {pedidoData.cartItems.map(item => (
+                                <TableRow key={item.codigo_producto}>
+                                    <TableCell>{item.nombre_producto}</TableCell>
+                                    <TableCell>{item.precio}</TableCell>
+                                    <TableCell>{item.cantidad}</TableCell>
+                                    <TableCell>{item.precio * item.cantidad}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </ScrollArea>
+            );
+        } catch (error) {
+            console.error("Error parsing or rendering pedido details:", error);
+            return <p>Error al mostrar los detalles del pedido.</p>;
+        }
     };
 
 
