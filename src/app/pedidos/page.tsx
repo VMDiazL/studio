@@ -16,7 +16,7 @@ interface CartItem {
 }
 
 interface PedidoData {
-  cartItems: CartItem[];
+  cartItems?: CartItem[];
   username: string;
   phoneNumber?: string;
 }
