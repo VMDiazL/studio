@@ -118,13 +118,12 @@ const SalesPage = () => {
 
 
   return (
-    
+    <>
       <Button onClick={() => router.push('/home')} variant="outline" className="mb-4">
         Go to Home
       </Button>
-
-       {username && (
-          <div className="text-sm ml-4">Logged in as: {username}</div>
+        {username && (
+           <div className="text-sm ml-4">Logged in as: {username}</div>
         )}
 
       <h1 className="text-2xl font-semibold mb-4">Sales</h1>
@@ -221,7 +220,7 @@ const SalesPage = () => {
           </CardContent>
         </Card>
       </div>
-    
+    </>
   );
 };
 

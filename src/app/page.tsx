@@ -20,7 +20,7 @@ export default function Home() {
     if (storedUsername) {
       setIsLoggedIn(true);
       // Redirect to home page
-        router.push('/home');
+        router.push('/sales');
     }
   }, [router]);
 
