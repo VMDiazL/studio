@@ -116,6 +116,39 @@ const PedidosPage = () => {
         setPedidos(pedidos);
     };
 
+    const getPedidoDetails = (pedidoId) => {
+        const pedidoData = JSON.parse(localStorage.getItem(pedidoId));
+
+        if (!pedidoData || !pedidoData.cartItems) {
+            return <p>No hay datos de carrito para mostrar.</p>;
+        }
+
+        return (
+            <ScrollArea className="h-[200px] w-full rounded-md border">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Product</TableHead>
+                            <TableHead>Price</TableHead>
+                            <TableHead>Quantity</TableHead>
+                            <TableHead>Total</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {pedidoData.cartItems.map(item => (
+                            <TableRow key={item.codigo_producto}>
+                                <TableCell>{item.nombre_producto}</TableCell>
+                                <TableCell>{item.precio}</TableCell>
+                                <TableCell>{item.cantidad}</TableCell>
+                                <TableCell>{item.precio * item.cantidad}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </ScrollArea>
+        );
+    };
+
 
     return (
         <div className="container mx-auto p-4">
@@ -136,6 +169,7 @@ const PedidosPage = () => {
                                     <TableHead>Pedido ID</TableHead>
                                     <TableHead>Username</TableHead>
                                     <TableHead>Phone Number</TableHead>
+                                    <TableHead>Detalles del Pedido</TableHead>
                                     <TableHead className="text-right">Acciones</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -145,6 +179,7 @@ const PedidosPage = () => {
                                         <TableCell>{pedidoId}</TableCell>
                                         <TableCell>{pedidoData.username}</TableCell>
                                         <TableCell>{pedidoData.phoneNumber}</TableCell>
+                                        <TableCell>{getPedidoDetails(pedidoId)}</TableCell>
                                         <TableCell className="text-right">
                                             <Button onClick={() => handleProcessPedido(pedidoId)}>
                                                 Process Pedido
